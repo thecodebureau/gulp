@@ -5,7 +5,6 @@ var _ = require('lodash');
 var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
 
-
 module.exports = function(gulp, config) {
 	function bower(src){
 		function addFile(file, pkg) {
