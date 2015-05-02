@@ -12,6 +12,10 @@ global.PWD = process.env.PWD;
 module.exports = function(config) {
 	if(!config) config = require(process.env.PWD + '/gulpconfig');
 	// set up gulp helper functions
+	gulp.mkdir = require('./util/mkdir');
+	gulp.timer = require('./util/timer');
+	gulp.logger = require('./util/logger');
+	gulp.errorHandler = require('./util/error-handler');
 
 	// set the gulp dir root
 	gulp.dir = __dirname;

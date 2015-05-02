@@ -2,8 +2,10 @@ var util = require('gulp-util');
 
 module.exports = function(err) {
   //var args = Array.prototype.slice.call(arguments);
-	util.log(err.message ? err.message.trim() : 'NO NAME HERE');
-	util.log(err.stack);
+	console.log(err);
+	//console.log('hello');
+	//util.log(err.message ? err.message.trim() : 'NO NAME HERE');
+	//util.log(err.stack);
 
   // Send error to notification center with gulp-notify
   //notify.onError({
@@ -12,7 +14,8 @@ module.exports = function(err) {
   //}).apply(this, args);
 
 	// needed for error handling not thrown by gulp-watch
-	if(this.emit)
+	if(this.emit) {
 		// Keep gulp from hanging on this task
 		this.emit('end');
+	}
 };
