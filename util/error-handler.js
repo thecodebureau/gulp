@@ -2,7 +2,8 @@ var util = require('gulp-util');
 
 module.exports = function(err) {
   //var args = Array.prototype.slice.call(arguments);
-	console.log(err);
+	console.log('Error handler');
+	console.log(err.message || err);
 	//console.log('hello');
 	//util.log(err.message ? err.message.trim() : 'NO NAME HERE');
 	//util.log(err.stack);
