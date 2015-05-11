@@ -55,7 +55,10 @@ function tcbSass(options) {
 				file.path = ext(file.path, '.css');
 				file.contents = new Buffer(result.css);
 
+
 				this.push(file);
+
+				console.log(this);
 
 				cb(null, file);
 			}.bind(this));
