@@ -21,7 +21,10 @@ module.exports = function(config) {
 	gulp.dir = __dirname;
 
 	// require ALL js files in the task directory recursively
-	var obj = requireDir('./tasks', { recurse: true });
+	var obj = requireDir('./tasks');
+	
+	if(ENV === 'development')
+		_.extend(obj, requireDir('./tasks/development'));
 
 	// since all task files should return a function
 	// that takes the gulp instance and the config as parameters,
@@ -30,6 +33,8 @@ module.exports = function(config) {
 		obj[p](gulp, config);
 	}
 
+	// sets up all tasks fr[m config.tasks using runSequence, usually only the
+	// 'default' task
 	_.each(config.tasks, function(subTasks, name) {
 		gulp.task(name, function(callback) {
 			var tasks = subTasks.slice(0);
