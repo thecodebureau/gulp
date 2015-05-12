@@ -9,13 +9,13 @@ module.exports = function(config) {
 	var autoprefixer = {
 		defaults: {
 			browsers: [
-				'last 2 versions',
-				'safari 5',
-				'ie 8',
-				'ie 9',
-				'opera 12.1',
-				//'ios 6',
-				'android 4'
+				'safari >= 5',
+				'ie >= 8',
+				'ios >= 6',
+				'opera >= 12.1',
+				'firefox >= 17',
+				'chrome >= 30',
+				'android >= 4'
 			],
 			cascade: true
 		}

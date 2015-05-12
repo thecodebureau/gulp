@@ -1,4 +1,4 @@
-var sass         = require('../plugins/tcb-sass');
+var sass         = require('gulp-sass');
 var postcss = require('gulp-postcss');
 var autoprefixer = require('autoprefixer-core');
 
@@ -15,12 +15,10 @@ module.exports = function(gulp, config) {
 	//config.sass.options.onError = gulp.errorHandler;
 
 	gulp.task('sass', function() {
-		console.log('config.sass.src');
-		console.log(config.sass.src);
 		return gulp.src(config.sass.src)
 			.pipe(sass(config.sass.options))
 			.on('error', gulp.errorHandler)
-			//.pipe(postcss(processors))
+			.pipe(postcss(processors))
 			.pipe(gulp.dest(config.sass.dest));
 	});
 };
