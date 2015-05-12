@@ -46,8 +46,6 @@ function tcbSass(options) {
 
 			nodeSass.render(opts, function(err, result) {
 				if(err) {
-					console.log('emitting error');
-					console.log(file.path);
 					this.emit('error', new PluginError(PLUGIN_NAME, err));
 					return cb();
 				}
@@ -57,8 +55,6 @@ function tcbSass(options) {
 
 
 				this.push(file);
-
-				console.log(this);
 
 				cb(null, file);
 			}.bind(this));
