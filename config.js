@@ -53,7 +53,7 @@ module.exports = function(config) {
 				'app.js',
 				'admin/app.js'
 			],
-			paths: [ path.join(PWD, 'layer2_modules') ],
+			paths: [ path.join(PWD, 'hatter_modules') ],
 			// outputs only need to be used if output names are different from entries. Otherwise the entries array is copied into the outputs array.
 			outputs: [
 				'app.js',
@@ -101,7 +101,7 @@ module.exports = function(config) {
 			dest: config.dir.public.css,
 			options: {
 				outputStyle: 'nested',
-				includePaths: ['./node_modules/tcb-spysass/sass'],
+				includePaths: ['./node_modules/spysass/sass'],
 				imagePath: '../img',
 			}
 		}
