@@ -53,7 +53,7 @@ module.exports = function(config) {
 				'app.js',
 				'admin/app.js'
 			],
-			paths: [ path.join(PWD, 'hatter_modules') ],
+			paths: [ path.join(PWD, 'node_modules/hatter/hatter_modules'), path.join(PWD, 'hatter_modules') ],
 			// outputs only need to be used if output names are different from entries. Otherwise the entries array is copied into the outputs array.
 			outputs: [
 				'app.js',
