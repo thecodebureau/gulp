@@ -114,10 +114,10 @@ module.exports = function(config) {
 	};
 	var tasks = {
 		development: {
-			default: [ 'wipe', [ 'bower', 'browserify', 'fonts', 'nodemon', 'raster', 'sass', 'svg' ], [ 'watch', 'browser-sync' ] ]
+			default: [ 'wipe', [ 'bower', 'browserify', 'fonts', 'nodemon', 'raster', 'sass', 'static', 'svg' ], [ 'watch', 'browser-sync' ] ]
 		},
 		production: {
-			default: [ 'wipe', [ 'bower', 'browserify', 'fonts', 'raster', 'sass', 'svg' ]]
+			default: [ 'wipe', [ 'bower', 'browserify', 'fonts', 'raster', 'sass', 'static', 'svg' ]]
 		}
 	};
 	var svg = {
