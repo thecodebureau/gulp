@@ -108,7 +108,7 @@ module.exports = function(config) {
 	};
 	var static = {
 		defaults: {
-			src: path.join(config.dir.src.static, '**/*'),
+			src: path.join(config.dir.src.static, '**/*.*'),
 			dest: config.dir.public.root
 		}
 	};
