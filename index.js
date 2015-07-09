@@ -6,9 +6,14 @@ var requireDir = require('require-dir');
 var gulp = require('gulp');
 var runSequence = require('run-sequence');
 
+// colors
+
+//require('./util/colors');
+
 global.ENV = process.env.NODE_ENV || 'development';
 global.PWD = process.env.PWD;
 
+var high = 4 + 4;
 module.exports = function(config) {
 	if(!config) config = require(process.env.PWD + '/gulpconfig');
 	// set up gulp helper functions
