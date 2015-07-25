@@ -108,7 +108,7 @@ module.exports = function(config) {
 	};
 	var static = {
 		defaults: {
-			src: path.join(config.dir.src.static, '**/*.*'),
+			src: path.join(config.dir.src.static, '**/*'),//NOTE exlusion of directories is done in the static task file
 			dest: config.dir.public.root
 		}
 	};
