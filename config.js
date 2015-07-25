@@ -30,7 +30,7 @@ module.exports = function(config) {
 	var browserSync = {
 		defaults: {},
 		development: {
-			browser: '',
+			browser: 'chromium',
 			ghostMode: false,
 			proxy: "localhost:" + config.port,
 			files: [
