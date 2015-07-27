@@ -13,9 +13,7 @@ var _ = require('lodash');
 var port = require(path.join(PWD, 'server/config/port'));
 var dir = require(path.join(PWD, 'server/config/dir'));
 
-var userConfig = fs.existsSync(path.join(PWD, 'server/config/gulp')) ? require(path.join(PWD, 'server/config/gulp')) : {};
-
-console.log(port);
+var userConfig = fs.existsSync(path.join(PWD, 'server/config/gulp.js')) ? require(path.join(PWD, 'server/config/gulp')) : {};
 
 var autoprefixer = {
 	defaults: {
@@ -61,14 +59,12 @@ var browserify = {
 		debug: true,
 		dest: dir.public.scripts,
 		entries: [ 
-			'app.js',
-			'admin/app.js'
+			'app.js'
 		],
 		paths: [ path.join(PWD, 'node_modules/hatter/hatter_modules'), path.join(PWD, 'hatter_modules') ],
 		// outputs only need to be used if output names are different from entries. Otherwise the entries array is copied into the outputs array.
 		outputs: [
-			'app.js',
-			'admin.js'
+			'app.js'
 		],
 		src: dir.src.scripts
 	},
