@@ -61,7 +61,7 @@ var browserify = {
 		entries: [ 
 			'app.js'
 		],
-		paths: [ path.join(PWD, 'node_modules/hatter/hatter_modules'), path.join(PWD, 'hatter_modules') ],
+		paths: [ path.join(PWD, 'node_modules/hats'), path.join(PWD, 'hats') ],
 		// outputs only need to be used if output names are different from entries. Otherwise the entries array is copied into the outputs array.
 		outputs: [
 			'app.js'
