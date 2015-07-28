@@ -23,9 +23,11 @@ module.exports = function(gulp, config) {
 				case 'development':
 					src.on('error', function formatError(err) {
 						err.task = 'browserify';
-						var matchFileName = err.message.match(/'(\/[-\/.\w]*)'/);
+
+						var matchFileName = err.message.match(/\/[^\s:]*/);
+
 						if(matchFileName) {
-							var fileName = matchFileName[1];
+							var fileName = matchFileName[0];
 							if(fileName.indexOf(PWD) > -1)
 								fileName = './' + p.relative(PWD, fileName);
 
@@ -41,8 +43,8 @@ module.exports = function(gulp, config) {
 
 							err.message = err.message.split(matchFileName[0]).join(fileName);
 						}
-						err.message = err.message.split(/:\s*/).join('\n');
 
+						err.message = err.message.split(/:\s*/).join('\n');
 
 						gulp.errorHandler.call(this, err);
 					}).pipe(fs.createWriteStream(p.join(config.dest, file)));

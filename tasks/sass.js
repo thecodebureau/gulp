@@ -24,8 +24,12 @@ module.exports = function(gulp, config) {
 				var message = err.message.slice(match.index + match[0].length);
 
 				match = message.match(/\s+Backtrace:\s+(.*)/);
-				message = message.slice(0, match.index);
-				err.message = chalk.yellow('./' + p.relative(PWD, err.file)) + '\n' + message + ' at line ' + err.line + ', col ' + err.column + '\n\nBacktrace:\n' + match[1];
+
+				if(match)
+					message = message.slice(0, match.index);
+
+				err.message = chalk.yellow('./' + p.relative(PWD, err.file)) + '\n' + message + ' at line ' + err.line + ', col ' + err.column + (match ? '\n\nBacktrace:\n' + match[1] : '');
+
 				gulp.errorHandler.call(this, err);
 			})
 			.pipe(postcss(processors))
