@@ -19,6 +19,7 @@
   "dependencies": {
     "autoprefixer-core": "^5.1.7",
     "browserify": "^9.0.3",
+    "chalk": "^1.1.0",
     "factor-bundle": "^2.3.3",
     "gulp": "^3.8.11",
     "gulp-postcss": "^4.0.3",

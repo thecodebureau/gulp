@@ -1,5 +1,5 @@
 // native modules
-var path = require('path');
+var p = require('path');
 var fs = require('fs');
 var stream = require('stream');
 
@@ -8,19 +8,44 @@ var browserify   = require('browserify');
 var source       = require('vinyl-source-stream');
 var buffer       = require('vinyl-buffer');
 var sourcemaps = require('gulp-sourcemaps');
+var chalk = require('chalk');
 
 var uglify = require('gulp-uglify');
 
 module.exports = function(gulp, config) {
 
 	function piper (file) {
-		var p = new stream.Writable();
+		var w = new stream.Writable();
 		// all instances of Writable stream must have a _write function
-		p._write = function(c,e,cb){cb();};
-		p.on('pipe', function(src) {
+		w._write = function(c,e,cb){cb();};
+		w.on('pipe', function(src) {
 			switch(ENV) {
 				case 'development':
-					src.on('error', gulp.errorHandler).pipe(fs.createWriteStream(path.join(config.dest, file)));
+					src.on('error', function formatError(err) {
+						err.task = 'browserify';
+						var matchFileName = err.message.match(/'(\/[-\/.\w]*)'/);
+						if(matchFileName) {
+							var fileName = matchFileName[1];
+							if(fileName.indexOf(PWD) > -1)
+								fileName = './' + p.relative(PWD, fileName);
+
+							fileName = chalk.yellow(fileName);
+
+							var matchNumbers = err.message.match(/ \((.*)\)/);
+
+							if(matchNumbers) {
+								var arr = matchNumbers[1].split(':');
+
+								err.message = err.message.slice(0, matchNumbers.index) + ' at line ' + arr[0] + ', col ' + arr[1];
+							}
+
+							err.message = err.message.split(matchFileName[0]).join(fileName);
+						}
+						err.message = err.message.split(/:\s*/).join('\n');
+
+
+						gulp.errorHandler.call(this, err);
+					}).pipe(fs.createWriteStream(p.join(config.dest, file)));
 					break;
 				case 'production':
 					src
@@ -32,7 +57,7 @@ module.exports = function(gulp, config) {
 						.pipe(gulp.dest(config.dest));
 			}
 		});
-		return p;
+		return w;
 	}
 
 	config = config.browserify || config;
@@ -52,7 +77,7 @@ module.exports = function(gulp, config) {
 
 	// make config entries absolute paths
 	config.entries = config.entries.map(function(currentValue, index, arr) {
-		return path.join(config.src, currentValue);
+		return p.join(config.src, currentValue);
 	});
 
 	if(config.outputs.length > 1) {
@@ -67,8 +92,8 @@ module.exports = function(gulp, config) {
 		if(!initialized) {
 			gulp.mkdir(config.dest);
 			if(config._require) {
-				fs.createReadStream(path.join(gulp.dir, 'includes', 'require.js'))
-					.pipe(fs.createWriteStream(path.join(config.dest, 'require.js')));
+				fs.createReadStream(p.join(gulp.dir, 'includes', 'require.js'))
+					.pipe(fs.createWriteStream(p.join(config.dest, 'require.js')));
 			}
 			initialized = true;
 		}

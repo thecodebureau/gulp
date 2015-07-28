@@ -1,19 +1,10 @@
 var util = require('gulp-util');
+var chalk = require('chalk');
 
 module.exports = function(err) {
-  //var args = Array.prototype.slice.call(arguments);
-	console.log('Error handler');
-	console.log(err.message || err);
-	console.log(err);
-	//console.log('hello');
-	//util.log(err.message ? err.message.trim() : 'NO NAME HERE');
-	//util.log(err.stack);
 
-  // Send error to notification center with gulp-notify
-  //notify.onError({
-  //  title: "Compile Error",
-  //  message: "<%= error.message %>"
-  //}).apply(this, args);
+	util.log(chalk.red('ERROR') + ' in task \'' + chalk.cyan(err.task) + '\'');
+	console.log('\n' + err.message + '\n');
 
 	// needed for error handling not thrown by gulp-watch
 	if(this.emit) {
