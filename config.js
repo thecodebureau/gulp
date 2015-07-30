@@ -1,5 +1,5 @@
 // native modules
-var path = require('path');
+var p = require('path');
 var fs = require('fs');
 
 // 3rd party modules
@@ -10,10 +10,10 @@ var _ = require('lodash');
 //var ENV = process.env.NODE_ENV || 'development';
 
 // TODO test if defaults,production on object
-var port = require(path.join(PWD, 'server/config/port'));
-var dir = require(path.join(PWD, 'server/config/dir'));
+var port = require(p.join(PWD, 'server/config/port'));
+var dir = require(p.join(PWD, 'server/config/dir'));
 
-var userConfig = fs.existsSync(path.join(PWD, 'server/config/gulp.js')) ? require(path.join(PWD, 'server/config/gulp')) : {};
+var userConfig = fs.existsSync(p.join(PWD, 'server/config/gulp.js')) ? require(p.join(PWD, 'server/config/gulp')) : {};
 
 var autoprefixer = {
 	defaults: {
@@ -31,8 +31,8 @@ var autoprefixer = {
 };
 var bower = {
 	defaults: {
-		src: path.join(dir.root, 'bower_components'),
-		dest: path.join(dir.public.scripts, 'bower')
+		src: p.join(dir.root, 'bower_components'),
+		dest: p.join(dir.public.scripts, 'bower')
 	}
 };
 
@@ -43,10 +43,10 @@ var browserSync = {
 		ghostMode: false,
 		proxy: "localhost:" + port,
 		files: [
-			path.join(dir.public.css, '**/*.css'),
-			path.join(dir.public.scripts, '**/*.js'),
+			p.join(dir.public.css, '**/*.css'),
+			p.join(dir.public.scripts, '**/*.js'),
 			// won't reload correctly for dust templates. Assuming it has to do with nodemon restarting node and node compiling templates.
-			//path.join(dir.server.templates, '**/*.{html,dust}'),
+			//p.join(dir.server.templates, '**/*.{html,dust}'),
 		]
 	}
 };
@@ -61,7 +61,8 @@ var browserify = {
 		entries: [ 
 			'app.js'
 		],
-		//paths: [ path.join(PWD, 'node_modules/hats'), path.join(PWD, 'hats') ],
+		paths: [ p.join(PWD, 'node_modules') ],
+		//paths: [ p.join(PWD, 'node_modules/hats'), p.join(PWD, 'hats') ],
 		// outputs only need to be used if output names are different from entries. Otherwise the entries array is copied into the outputs array.
 		outputs: [
 			'app.js'
@@ -81,15 +82,15 @@ var browserify = {
 
 var fonts = {
 	defaults: {
-		src: path.join(dir.src.fonts, '**/*.{eot,ttf,woff}'),
+		src: p.join(dir.src.fonts, '**/*.{eot,ttf,woff}'),
 		dest: dir.public.fonts
 	}
 };
 
 var nodemon = {
 	// load all nodemon settings from nodemon.json and merge with { reloadDelay: 300, script: ('package.json').main }. overrides found below
-	defaults: _.merge(require(path.join(process.env.PWD, 'nodemon.json')),
-		{ reloadDelay: 300, script: require(path.join(process.env.PWD, 'package.json')).main })
+	defaults: _.merge(require(p.join(process.env.PWD, 'nodemon.json')),
+		{ reloadDelay: 300, script: require(p.join(process.env.PWD, 'package.json')).main })
 	//defaults: {
 	//	script: "server/server.js",
 	//	ext: "js,dust",
@@ -99,14 +100,14 @@ var nodemon = {
 };
 var raster = {
 	defaults: {
-		src: path.join(dir.src.raster, '**/*.{png,gif,jpg}'),
+		src: p.join(dir.src.raster, '**/*.{png,gif,jpg}'),
 		dest: dir.public.img
 	}
 };
 
 var sass =  {
 	defaults: {
-		src:  path.join(dir.src.sass, '**/*.{sass,scss}'),
+		src:  p.join(dir.src.sass, '**/*.{sass,scss}'),
 		dest: dir.public.css,
 		options: {
 			outputStyle: 'nested',
@@ -118,7 +119,7 @@ var sass =  {
 
 var static = {
 	defaults: {
-		src: path.join(dir.src.static, '**/*'),//NOTE exlusion of directories is done in the static task file
+		src: p.join(dir.src.static, '**/*'),//NOTE exlusion of directories is done in the static task file
 		dest: dir.public.root
 	}
 };
@@ -134,15 +135,15 @@ var tasks = {
 
 var svg = {
 	defaults: {
-		src: path.join(dir.src.svg, '**/*.svg'),
+		src: p.join(dir.src.svg, '**/*.svg'),
 		dest: dir.public.img
 	}
 };
 
 var watch = {
 	defaults: {
-		browserify: path.join(dir.src.scripts, '**/*.js'),
-		sass:    path.join(dir.src.sass, '**/*.{sass,scss}')
+		browserify: p.join(dir.src.scripts, '**/*.js'),
+		sass:    p.join(dir.src.sass, '**/*.{sass,scss}')
 	}
 };
 
