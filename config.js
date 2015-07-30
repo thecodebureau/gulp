@@ -61,7 +61,7 @@ var browserify = {
 		entries: [ 
 			'app.js'
 		],
-		paths: [ p.join(PWD, 'node_modules') ],
+		paths: [ p.join(PWD, 'node_modules'), p.join(PWD, 'modules') ],// PWD/node_modules is added so symlinked ridge does not break. used to work without this in browserify 9
 		//paths: [ p.join(PWD, 'node_modules/hats'), p.join(PWD, 'hats') ],
 		// outputs only need to be used if output names are different from entries. Otherwise the entries array is copied into the outputs array.
 		outputs: [
