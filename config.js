@@ -13,7 +13,7 @@ var _ = require('lodash');
 var port = require(p.join(PWD, 'server/config/port'));
 var dir = require(p.join(PWD, 'server/config/dir'));
 
-var userConfig = fs.existsSync(p.join(PWD, 'server/config/gulp.js')) ? require(p.join(PWD, 'server/config/gulp')) : {};
+var userConfig = fs.existsSync(p.join(PWD, 'gulpconfig.js')) ? require(p.join(PWD, 'gulpconfig.js')) : {};
 
 var autoprefixer = {
 	defaults: {
@@ -29,6 +29,7 @@ var autoprefixer = {
 		cascade: true
 	}
 };
+
 var bower = {
 	defaults: {
 		src: p.join(dir.root, 'bower_components'),
@@ -50,6 +51,7 @@ var browserSync = {
 		]
 	}
 };
+
 var browserify = {
 	defaults: {
 		// All these are for lazy loading of bundles
@@ -89,15 +91,16 @@ var fonts = {
 
 var nodemon = {
 	// load all nodemon settings from nodemon.json and merge with { reloadDelay: 300, script: ('package.json').main }. overrides found below
-	defaults: _.merge(require(p.join(process.env.PWD, 'nodemon.json')),
-		{ reloadDelay: 300, script: require(p.join(process.env.PWD, 'package.json')).main })
-	//defaults: {
-	//	script: "server/server.js",
-	//	ext: "js,dust",
-	//	reloadDelay: 500,
-	//	watch: [ "config", "server" ]
-	//}
+	defaults: _.merge(require(p.join(process.env.PWD, 'nodemon.json')), {
+		reloadDelay: 300,
+		script: require(p.join(process.env.PWD, 'package.json')).main,
+		env: {
+			NODE_ENV: "development",
+			DEBUG: "epiphany:loaders"
+		}
+	})
 };
+
 var raster = {
 	defaults: {
 		src: p.join(dir.src.raster, '**/*.{png,gif,jpg}'),
@@ -155,7 +158,6 @@ var wipe = {
 
 // TODO allow defaults, production etc in userConfig
 module.exports = {
-
 	autoprefixer: _.merge(autoprefixer.defaults, autoprefixer[ENV], userConfig.autoprefixer),
 	bower: _.merge(bower.defaults, bower[ENV], userConfig.bower),
 	browserSync: _.merge(browserSync.defaults, browserSync[ENV], userConfig.browserSync),
