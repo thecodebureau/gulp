@@ -1,6 +1,5 @@
 var path = require('path');
 var fs = require('fs');
-var _ = require('lodash');
 
 var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');

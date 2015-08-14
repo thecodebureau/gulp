@@ -2,13 +2,6 @@
 var p = require('path');
 var fs = require('fs');
 
-// 3rd party modules
-var _ = require('lodash');
-
-// PWD and ENV should be set in boun
-//var PWD = process.env.PWD;
-//var ENV = process.env.NODE_ENV || 'development';
-
 // TODO test if defaults,production on object
 var port = require(p.join(PWD, 'server/config/port'));
 var dir = require(p.join(PWD, 'server/config/dir'));

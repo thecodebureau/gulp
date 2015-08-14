@@ -1,4 +1,3 @@
-var _ = require('lodash');
 
 module.exports = function(gulp, config) {
 	config = config.watch || config;

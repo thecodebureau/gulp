@@ -1,5 +1,5 @@
 // modules > 3rd party
-var _ = require('lodash');
+global._ = require('lodash');
 var requireDir = require('require-dir');
 
 // modules > gulp
