@@ -35,7 +35,7 @@
     "require-dir": "^0.3.0",
     "rimraf": "^2.4.2",
     "run-sequence": "^1.1.2",
-    "spysass": "^0.8.5",
+    "spysass": "^0.9.0",
     "through2": "^2.0.0",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0"
