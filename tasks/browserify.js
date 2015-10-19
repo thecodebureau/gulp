@@ -11,6 +11,7 @@ var sourcemaps = require('gulp-sourcemaps');
 var chalk = require('chalk');
 
 var uglify = require('gulp-uglify');
+var rename = require('gulp-rename');
 
 module.exports = function(gulp, config) {
 
@@ -55,6 +56,7 @@ module.exports = function(gulp, config) {
 						.pipe(buffer())
 						.pipe(sourcemaps.init({loadMaps: true}))
 						.pipe(uglify())
+						.pipe(rename({ suffix: suffix }))
 						.pipe(sourcemaps.write('./'))
 						.pipe(gulp.dest(config.dest));
 			}
@@ -74,7 +76,7 @@ module.exports = function(gulp, config) {
 
 	var bundleFile, plugins = {};
 
-	// needed for piper, see line 101
+	// needed for piper
 	config.originalOutputs = config.outputs;
 
 	// make config entries absolute paths
@@ -90,9 +92,15 @@ module.exports = function(gulp, config) {
 		bundleFile = config.outputs[0];
 	}
 
+	var suffix = ENV === 'production' ? '-' + Date.now().toString(16) : '';
+
 	gulp.task('browserify', function(callback) {
+
 		if(!initialized) {
 			gulp.mkdir(config.dest);
+
+			fs.writeFile(config.dest + '.json', JSON.stringify({ suffix: suffix }));
+
 			if(config._require) {
 				fs.createReadStream(p.join(gulp.dir, 'includes', 'require.js'))
 					.pipe(fs.createWriteStream(p.join(config.dest, 'require.js')));

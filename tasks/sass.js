@@ -1,11 +1,12 @@
 var p = require('path');
+var fs = require('fs');
 var chalk = require('chalk');
 var sass         = require('gulp-sass');
 var postcss = require('gulp-postcss');
 var autoprefixer = require('autoprefixer-core');
 
 var sourcemaps = require('gulp-sourcemaps');
-
+var rename = require('gulp-rename');
 
 module.exports = function(gulp, config) {
 	function errorHandler(err) {
@@ -33,12 +34,17 @@ module.exports = function(gulp, config) {
 
 	//config.sass.options.onError = gulp.errorHandler;
 
+	var suffix = '-' + Date.now().toString(16);
+
 	gulp.task('sass', function() {
+		fs.writeFile(config.sass.dest + '.json', JSON.stringify({ suffix: suffix }));
+
 		return gulp.src(config.sass.src)
 			.pipe(sourcemaps.init())
 			.pipe(sass(config.sass.options))
 			.on('error', errorHandler)
 			.pipe(postcss(processors))
+			.pipe(rename({ suffix: suffix }))
 			.pipe(sourcemaps.write('./maps'))
 			.pipe(gulp.dest(config.sass.dest));
 	});
