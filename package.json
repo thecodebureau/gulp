@@ -18,10 +18,13 @@
   "homepage": "https://github.com/thecodebureau/gulp",
   "dependencies": {
     "autoprefixer-core": "^5.2.1",
+    "browser-sync": "^2.2.1",
     "browserify": "^11.0.0",
     "chalk": "^1.1.0",
+    "csswring": "^3.0.1",
     "factor-bundle": "^2.4.1",
     "gulp": "^3.9.0",
+    "gulp-nodemon": "^1.0.5",
     "gulp-postcss": "^5.1.10",
     "gulp-rename": "^1.2.2",
     "gulp-sass": "^2.0.4",
@@ -39,14 +42,5 @@
     "through2": "^2.0.0",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0"
-  },
-  "_environmentDependencies": {
-    "development": {
-      "browser-sync": "^2.2.1",
-      "gulp-nodemon": "^1.0.5"
-    },
-    "production": {
-      "csswring": "^3.0.1"
-    }
   }
 }
