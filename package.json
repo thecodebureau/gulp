@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/thecodebureau/gulp",
   "dependencies": {
-    "autoprefixer-core": "^6.0.1",
+    "autoprefixer": "^6.0.3",
     "browser-sync": "^2.2.1",
     "browserify": "^12.0.1",
     "chalk": "^1.1.0",

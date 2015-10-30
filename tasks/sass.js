@@ -3,7 +3,7 @@ var fs = require('fs');
 var chalk = require('chalk');
 var sass         = require('gulp-sass');
 var postcss = require('gulp-postcss');
-var autoprefixer = require('autoprefixer-core');
+var autoprefixer = require('autoprefixer');
 
 var sourcemaps = require('gulp-sourcemaps');
 var rename = require('gulp-rename');
