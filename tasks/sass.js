@@ -10,15 +10,19 @@ var rename = require('gulp-rename');
 
 module.exports = function(gulp, config) {
 	function errorHandler(err) {
-		var match = err.message.match(/\d+:\d+\s+/);
-		var message = err.message.slice(match.index + match[0].length);
+		if(err.plugin === 'gulp-sass') {
+			// node-sass currently outpus current file as first line of error message
+			var path = err.message.match(/^.*\n/)[0];
 
-		match = message.match(/\s+Backtrace:\s+(.*)/);
+			err.message = err.message.slice(path.length + 7);
 
-		if(match)
-			message = message.slice(0, match.index);
+			// when main file, ie main.scss throws an error the node-sass error
+			// will say stdin instead of the actual filename.
+			if(/\sstdin\s/.test(err.message))
+				err.message = err.message.replace(/\sstdin\s/, path);
+		}
 
-		err.message = chalk.yellow('./' + p.relative(PWD, err.file)) + '\n' + message + ' at line ' + err.line + ', col ' + err.column + (match ? '\n\nBacktrace:\n' + match[1] : '');
+		err.task = 'sass';
 
 		gulp.errorHandler.call(this, err);
 	}

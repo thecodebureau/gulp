@@ -3,8 +3,8 @@ var chalk = require('chalk');
 
 module.exports = function(err) {
 
-	util.log(chalk.red('ERROR') + ' in task \'' + chalk.cyan(err.task) + '\'');
-	console.log('\n' + err.message + '\n');
+	util.log(chalk.red('ERROR') + (err.task ? ' in task \'' + chalk.cyan(err.task) : ' in plugin \'' + chalk.cyan(err.plugin)) + '\'');
+	console.log('\n' + err.message.trim() + '\n');
 
 	// needed for error handling not thrown by gulp-watch
 	if(this.emit) {
