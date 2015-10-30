@@ -84,10 +84,11 @@ var fonts = {
 
 var nodemon = {
 	// load all nodemon settings from nodemon.json and merge with { reloadDelay: 300, script: ('package.json').main }. overrides found below
-	defaults: _.merge(require(p.join(process.env.PWD, 'nodemon.json')), {
+	defaults: _.merge(require(p.join(PWD, 'nodemon.json')), {
 		reloadDelay: 300,
-		script: require(p.join(process.env.PWD, 'package.json')).main,
+		script: require(p.join(PWD, 'package.json')).main.replace(/^\./, PWD),
 		env: {
+			PWD: PWD,
 			NODE_ENV: "development",
 			DEBUG: "epiphany:loaders"
 		}
@@ -107,7 +108,7 @@ var sass =  {
 		dest: dir.public.css,
 		options: {
 			outputStyle: 'nested',
-			includePaths: ['./node_modules/spysass/sass'],
+			includePaths: [ p.join(PWD, './node_modules/spysass/sass') ],
 			imagePath: '../img',
 		}
 	}
