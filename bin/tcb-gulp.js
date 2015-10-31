@@ -15,5 +15,17 @@ var gulpProcess = spawn(gulpExecutable, [ '--cwd', tcbGulpPath ], { stdio: 'inhe
 
 gulpProcess.on('close', function() {
 	console.log('Gulp process exited');
-	run();
+});
+
+gulpProcess.on('SIGINT', function() {
+	console.log('gulp process SIGINT');
+});
+
+process.on('SIGINT', function() {
+	console.log('main process siginit');
+	gulpProcess.kill();
+	process.exit();
+	
+
+
 });
