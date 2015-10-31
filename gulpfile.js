@@ -28,10 +28,10 @@ var obj = requireDir('./tasks');
 if(ENV === 'development')
 	_.extend(obj, requireDir('./tasks/development'));
 
-	if(process.env.INIT_CWD) {
-		process.chdir(process.env.INIT_CWD);
-		gutil.log('Working directory changed (BACK) to' + chalk.magenta(process.cwd()));
-	}
+if(process.env.INIT_CWD) {
+	process.chdir(process.env.INIT_CWD);
+	gutil.log('Working directory changed (BACK) to' + chalk.magenta(process.cwd()));
+}
 // since all task files should return a function
 // that takes the gulp instance and the config as parameters,
 // all functions on the `obj` are called.
