@@ -75,6 +75,14 @@ var browserify = {
 	}
 };
 
+var dust = {
+	defaults: {
+		// needs to be an array so it can be merged with gulpconfig.js array
+		src:  [ p.join(dir.src.templates, '**/*.dust') ],
+		dest: dir.public.templates,
+	}
+};
+
 var fonts = {
 	defaults: {
 		src: p.join(dir.src.fonts, '**/*.{eot,ttf,woff}'),
@@ -83,13 +91,12 @@ var fonts = {
 };
 
 var nodemon = {
-	// load all nodemon settings from nodemon.json and merge with { reloadDelay: 300, script: ('package.json').main }. overrides found below
 	defaults: _.merge(require(p.join(PWD, 'nodemon.json')), {
-		reloadDelay: 300,
 		script: require(p.join(PWD, 'package.json')).main.replace(/^\./, PWD),
 		env: {
 			PWD: PWD,
-			NODE_ENV: "development",
+			DEBUG_COLORS: true,// needed to force debug to use colors despite tty.istty(0) being false, which it is in a child process
+			NODE_ENV: ENV,
 			DEBUG: "epiphany:loaders"
 		}
 	})
@@ -123,10 +130,10 @@ var static = {
 
 var tasks = {
 	development: {
-		default: [ 'wipe', [ 'bower', 'browserify', 'fonts', 'nodemon', 'raster', 'sass', 'static', 'svg' ], [ 'watch', 'browser-sync' ] ]
+		default: [ 'wipe', [ 'bower', 'browserify', 'dust', 'fonts','raster', 'sass', 'static', 'svg' ], [ 'nodemon' ], [ 'watch', 'browser-sync' ] ]
 	},
 	production: {
-		default: [ 'wipe', [ 'bower', 'browserify', 'fonts', 'raster', 'sass', 'static', 'svg' ]]
+		default: [ 'wipe', [ 'bower', 'browserify', 'dust', 'fonts', 'raster', 'sass', 'static', 'svg' ]]
 	}
 };
 
@@ -140,7 +147,7 @@ var svg = {
 var watch = {
 	defaults: {
 		browserify: p.join(dir.src.scripts, '**/*.js'),
-		sass:    p.join(dir.src.sass, '**/*.{sass,scss}')
+		sass: p.join(dir.src.sass, '**/*.{sass,scss}')
 	}
 };
 
@@ -156,6 +163,11 @@ module.exports = {
 	bower: _.merge(bower.defaults, bower[ENV], userConfig.bower),
 	browserSync: _.merge(browserSync.defaults, browserSync[ENV], userConfig.browserSync),
 	browserify: _.merge(browserify.defaults, browserify[ENV], userConfig.browserify),
+	dust: _.merge(dust.defaults, dust[ENV], userConfig.dust, function(a, b) {
+		if (_.isArray(a)) {
+			return a.concat(b);
+		}
+	}),
 	fonts: _.merge(fonts.defaults, fonts[ENV], userConfig.fonts),
 	nodemon: _.merge(nodemon.defaults, nodemon[ENV], userConfig.nodemon),
 	raster: _.merge(raster.defaults, raster[ENV], userConfig.raster),
