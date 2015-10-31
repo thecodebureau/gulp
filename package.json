@@ -11,14 +11,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/thecodebureau/gulp.git"
+    "url": "https://github.com/thecodebureau/tcb-gulp.git"
   },
   "author": "The Code Bureau <info@thecodebureau.com> (https://thecodebureau.com)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/thecodebureau/gulp/issues"
+    "url": "https://github.com/thecodebureau/tcb-gulp/issues"
   },
-  "homepage": "https://github.com/thecodebureau/gulp",
+  "homepage": "https://github.com/thecodebureau/tcb-gulp",
   "dependencies": {
     "autoprefixer": "^6.0.3",
     "browser-sync": "^2.2.1",
