@@ -45,8 +45,7 @@ module.exports = function(gulp, config) {
 
 		return gulp.src(config.sass.src)
 			.pipe(sourcemaps.init())
-			.pipe(sass(config.sass.options))
-			.on('error', errorHandler)
+			.pipe(sass(config.sass.options).on('error', errorHandler))
 			.pipe(postcss(processors))
 			.pipe(rename({ suffix: suffix }))
 			.pipe(sourcemaps.write('./maps'))
