@@ -24,7 +24,7 @@ module.exports = function(gulp, config) {
 			})
 			.pipe(symlink(function(file) {
 				count++;
-				return path.join(config.dest, file.relative);
+				return p.join(config.dest, file.relative);
 			}));
 	});
 };
