@@ -18,13 +18,13 @@ module.exports = function(gulp, config) {
 	gulp.task(TASK_NAME, function() {
 		var count = 0;
 
-		gulp.src(config.src)
-			.on('end', function() {
-				gutil.log(chalk.cyan(TASK_NAME) + ' done symlinking ' + chalk.bold.blue(count) + ' files');
-			})
+		return gulp.src(config.src)
 			.pipe(symlink(function(file) {
 				count++;
 				return p.join(config.dest, file.relative);
-			}));
+			}, { log: false }))
+			.on('end', function() {
+				gutil.log(chalk.cyan(TASK_NAME) + ' done symlinking ' + chalk.bold.blue(count) + ' files');
+			});
 	});
 };

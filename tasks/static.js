@@ -1,26 +1,40 @@
-var path = require('path');
+// modules > native
+var p = require('path');
 var fs = require('fs');
 
-var through = require('through2');
+// modules > 3rd party
+var chalk = require('chalk');
 
+// modules > gulp:utilities
+var through = require('through2');
+var gutil = require('gulp-util');
+
+// modules > gulp:plugins
 var symlink = require('gulp-symlink');
+
+var TASK_NAME = 'static';
 
 module.exports = function(gulp, config) {
 	config = config.static || config;
-	gulp.task('static', function() {
+
+	gulp.task(TASK_NAME, function() {
+		var count = 0;
+
 		return gulp.src(config.src)
 			.pipe(through.obj(function (file, enc, callback) {
-				var that = this;
-
 				fs.stat(file.path, function(err, stats) {
-					if(!stats.isDirectory())
-						that.push(file);
+					if(stats.isDirectory())
+						file = null;
 
-					callback();
+					callback(null, file);
 				});
 			}))
 			.pipe(symlink(function(file) {
-				return path.join(config.dest, file.relative);
-			}));
+				count++;
+				return p.join(config.dest, file.relative);
+			}, { log: false }))
+			.on('end', function() {
+				gutil.log(chalk.cyan(TASK_NAME) + ' done symlinking ' + chalk.bold.blue(count) + ' files');
+			});
 	});
 };

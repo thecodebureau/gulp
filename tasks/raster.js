@@ -19,12 +19,12 @@ module.exports = function(gulp, config) {
 		var count = 0;
 
 		return gulp.src(config.src)
-			.on('end', function() {
-				gutil.log(chalk.cyan(TASK_NAME) + ' done symlinking ' + chalk.bold.blue(count) + ' files');
-			})
 			.pipe(symlink(function(file) {
 				count++;
 				return p.join(config.dest, file.relative);
-			}, { log: false }));
+			}, { log: false }))
+			.on('end', function() {
+				gutil.log(chalk.cyan(TASK_NAME) + ' done symlinking ' + chalk.bold.blue(count) + ' files');
+			});
 	});
 };
