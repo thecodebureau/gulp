@@ -1,54 +1,57 @@
+// modules > native
 var p = require('path');
 var fs = require('fs');
 
+// modules > gulp
+var gulp = require('gulp');
 var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
 
-module.exports = function(gulp, config) {
-	function bower(src){
-		function addFile(file, pkg) {
-			files[newFilename] = p.join(src, pkg, file);
-		}
+function bower(dir){
+	var files = [];
 
-		src = config.bower.src;
+	if(fs.existsSync(dir)) {
+		_.each(fs.readdirSync(dir), function(pkg) {
+			// first try to determine where bower.json is
+			var paths = [
+				p.join(dir, pkg, '.bower.json'),
+				p.join(dir, pkg, 'bower.json'),
+			];
+			
+			var path;
 
-		var files = [];
-
-		if(fs.existsSync(src)) {
-			_.each(fs.readdirSync(src), function(pkg) {
-				var jsonPath = p.join(src, pkg, '.bower.json');
-				if(!fs.existsSync(jsonPath)) {
-					jsonPath = p.normalize(p.join(jsonPath, '../bower.json'));
-					if(!fs.existsSync(jsonPath)) jsonPath = null; }
-
-				var main;
-				if(jsonPath) {
-					main = require(jsonPath).main;
+			for(var i = 0; i < paths.length; i++) {
+				if(fs.existsSync(paths[i])) {
+					path = paths[i];
+					break;
 				}
+			}
 
-				if(typeof main === 'string') {
-					files.push(p.join(src, pkg, main));
-				} else if (main instanceof Array) {
-					for(var j = 0; j < main.length; j++) {
-						files.push(p.join(src, pkg, main[j]));
-					}
-				} else {
-					var file = pkg + '.js';
-					if(fs.existsSync(p.join(src, pkg, file))) files.push(p.join(src, pkg, file));
-					else console.log('did not find a file for ' + pkg);
-				}
-			});
+			// if bower.json was found, require it and try get the main file
+			var main = path ? require(path).main : undefined;
 
-		}
-
-		return files;
-	}
-	gulp.task('bower', function() {
-		_.each(bower(), function(src, dest) {
-			gulp.src(src).
-				pipe(uglify()).pipe(rename(function(p){
-					p.basename = _.difference(p.basename.split(/[-_\.]/), ['dist', 'src', 'min', 'js']).join('-');
-				})).pipe(gulp.dest(config.bower.dest));
+			if(typeof main === 'string') {
+				files.push(p.join(dir, pkg, main));
+			} else if (main instanceof Array) {
+				files.push.apply(files, main.map(function(file) { return p.join(dir, pkg, file); }));
+			} else {
+				// if we did not find a file, check for a js file with bower package name
+				var file = pkg + '.js';
+				if(fs.existsSync(p.join(dir, pkg, file))) files.push(p.join(dir, pkg, file));
+				else console.log('did not find a file for ' + pkg);
+			}
 		});
+
+	}
+
+	return files;
+}
+
+gulp.task('bower', function() {
+	_.each(bower(gulp.config.bower.src), function(src, dest) {
+		gulp.src(src).
+			pipe(uglify()).pipe(rename(function(p){
+				p.basename = _.difference(p.basename.split(/[-_\.]/), ['dist', 'src', 'min', 'js']).join('-');
+			})).pipe(gulp.dest(config.bower.dest));
 	});
-};
+});
