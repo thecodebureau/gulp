@@ -1,54 +1,60 @@
+// modules > native
 var p = require('path');
 var fs = require('fs');
+
+// modules > 3rd party
 var chalk = require('chalk');
-var sass         = require('gulp-sass');
+
+// modules > gulp
+var gulp = require('gulp');
+var sass = require('gulp-sass');
 var postcss = require('gulp-postcss');
 var autoprefixer = require('autoprefixer');
 
 var sourcemaps = require('gulp-sourcemaps');
 var rename = require('gulp-rename');
 
-module.exports = function(gulp, config) {
-	function errorHandler(err) {
-		if(err.plugin === 'gulp-sass') {
-			// node-sass currently outpus current file as first line of error message
-			var path = err.message.match(/^.*\n/)[0];
+var config = gulp.config;
 
-			err.message = err.message.slice(path.length + 7);
+function errorHandler(err) {
+	if(err.plugin === 'gulp-sass') {
+		// node-sass currently outpus current file as first line of error message
+		var path = err.message.match(/^.*\n/)[0];
 
-			// when main file, ie main.scss throws an error the node-sass error
-			// will say stdin instead of the actual filename.
-			if(/\sstdin\s/.test(err.message))
-				err.message = err.message.replace(/\sstdin\s/, path);
-		}
+		err.message = err.message.slice(path.length + 7);
 
-		err.task = 'sass';
-
-		gulp.errorHandler.call(this, err);
+		// when main file, ie main.scss throws an error the node-sass error
+		// will say stdin instead of the actual filename.
+		if(/\sstdin\s/.test(err.message))
+			err.message = err.message.replace(/\sstdin\s/, path);
 	}
 
-	var processors = [
-		autoprefixer(config.autoprefixer),
-	];
+	err.task = 'sass';
 
-	if(ENV === 'production') {
-		var csswring = require('csswring');
-		processors.push(csswring(config.csswring));
-	}
+	gulp.errorHandler.call(this, err);
+}
 
-	//config.sass.options.onError = gulp.errorHandler;
+var processors = [
+	autoprefixer(config.autoprefixer),
+];
 
-	var suffix = '-' + Date.now().toString(16);
+if(ENV === 'production') {
+	var csswring = require('csswring');
+	processors.push(csswring(config.csswring));
+}
 
-	gulp.task('sass', function() {
-		fs.writeFile(config.sass.dest + '.json', JSON.stringify({ suffix: suffix }));
+//config.sass.options.onError = gulp.errorHandler;
 
-		return gulp.src(config.sass.src)
-			.pipe(sourcemaps.init())
-			.pipe(sass(config.sass.options).on('error', errorHandler))
-			.pipe(postcss(processors))
-			.pipe(rename({ suffix: suffix }))
-			.pipe(sourcemaps.write('./maps'))
-			.pipe(gulp.dest(config.sass.dest));
-	});
-};
+var suffix = '-' + Date.now().toString(16);
+
+gulp.task('sass', function() {
+	fs.writeFile(config.sass.dest + '.json', JSON.stringify({ suffix: suffix }));
+
+	return gulp.src(config.sass.src)
+		.pipe(sourcemaps.init())
+		.pipe(sass(config.sass.options).on('error', errorHandler))
+		.pipe(postcss(processors))
+		.pipe(rename({ suffix: suffix }))
+		.pipe(sourcemaps.write('./maps'))
+		.pipe(gulp.dest(config.sass.dest));
+});

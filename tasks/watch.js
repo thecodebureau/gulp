@@ -1,10 +1,9 @@
+var gulp = require('gulp');
 
-module.exports = function(gulp, config) {
-	config = config.watch || config;
+var config = gulp.config.watch;
 
-	gulp.task('watch', function(value) {
-		_.forIn(config, function(value, key) {
-			gulp.watch(value,  [key]);
-		});
+gulp.task('watch', function(value) {
+	_.forIn(config, function(value, key) {
+		gulp.watch(value,  [key]);
 	});
-};
+});

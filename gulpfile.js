@@ -1,17 +1,18 @@
 // modules > 3rd party
 var _ = require('lodash');
+var chalk = require('chalk');
 
 // modules > gulp
 var gulp = require('gulp');
 var runSequence = require('run-sequence');
 var gutil = require('gulp-util');
-var chalk = require('chalk');
 
 global._ = require('lodash');
 global.ENV = process.env.NODE_ENV || 'development';
 global.PWD = process.env.PWD;
 
-var config = require('./config');
+// gulp config
+gulp.config = require('./config');
 
 // set up gulp helper functions
 gulp.mkdir = require('./util/mkdir');
@@ -24,13 +25,8 @@ gulp.dir = __dirname;
 
 var args = process.argv.slice(4);
 
-(args.length > 0 ? args : _.flatten(config.tasks, true)).forEach(function(task) {
-	var module = require('./tasks/' + task);
-
-	// those tasks that require access to the config object will
-	// return a function. call it.
-	if(_.isFunction(module))
-		module(gulp, config);
+(args.length > 0 ? args : _.flatten(gulp.config.tasks, true)).forEach(function(task) {
+	require('./tasks/' + task);
 });
 
 // TCB-Gulp executable calls 'gulp --cwd [ path to tcb-gulp ], but gulp saves
@@ -43,5 +39,5 @@ if(process.env.INIT_CWD) {
 
 // set up the 'default' task to use runSequence to run all tasks
 gulp.task('default', function(callback) {
-	runSequence.apply(null, config.tasks.concat(callback));
+	runSequence.apply(null, gulp.config.tasks.concat(callback));
 });
