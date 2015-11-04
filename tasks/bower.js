@@ -1,4 +1,4 @@
-var path = require('path');
+var p = require('path');
 var fs = require('fs');
 
 var uglify = require('gulp-uglify');
@@ -7,7 +7,7 @@ var rename = require('gulp-rename');
 module.exports = function(gulp, config) {
 	function bower(src){
 		function addFile(file, pkg) {
-			files[newFilename] = path.join(src, pkg, file);
+			files[newFilename] = p.join(src, pkg, file);
 		}
 
 		src = config.bower.src;
@@ -16,9 +16,9 @@ module.exports = function(gulp, config) {
 
 		if(fs.existsSync(src)) {
 			_.each(fs.readdirSync(src), function(pkg) {
-				var jsonPath = path.join(src, pkg, '.bower.json');
+				var jsonPath = p.join(src, pkg, '.bower.json');
 				if(!fs.existsSync(jsonPath)) {
-					jsonPath = path.normalize(path.join(jsonPath, '../bower.json'));
+					jsonPath = p.normalize(p.join(jsonPath, '../bower.json'));
 					if(!fs.existsSync(jsonPath)) jsonPath = null; }
 
 				var main;
@@ -27,14 +27,14 @@ module.exports = function(gulp, config) {
 				}
 
 				if(typeof main === 'string') {
-					files.push(path.join(src, pkg, main));
+					files.push(p.join(src, pkg, main));
 				} else if (main instanceof Array) {
 					for(var j = 0; j < main.length; j++) {
-						files.push(path.join(src, pkg, main[j]));
+						files.push(p.join(src, pkg, main[j]));
 					}
 				} else {
 					var file = pkg + '.js';
-					if(fs.existsSync(path.join(src, pkg, file))) files.push(path.join(src, pkg, file));
+					if(fs.existsSync(p.join(src, pkg, file))) files.push(p.join(src, pkg, file));
 					else console.log('did not find a file for ' + pkg);
 				}
 			});
