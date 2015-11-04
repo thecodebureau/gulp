@@ -39,7 +39,6 @@
     "lodash": "^3.10.0",
     "postcss": "^5.0.10",
     "pretty-hrtime": "^1.0.0",
-    "require-dir": "^0.3.0",
     "rimraf": "^2.4.2",
     "run-sequence": "^1.1.2",
     "through2": "^2.0.0",

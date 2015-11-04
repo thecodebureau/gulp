@@ -1,6 +1,5 @@
 // modules > 3rd party
-global._ = require('lodash');
-var requireDir = require('require-dir');
+var _ = require('lodash');
 
 // modules > gulp
 var gulp = require('gulp');
@@ -8,6 +7,7 @@ var runSequence = require('run-sequence');
 var gutil = require('gulp-util');
 var chalk = require('chalk');
 
+global._ = require('lodash');
 global.ENV = process.env.NODE_ENV || 'development';
 global.PWD = process.env.PWD;
 
@@ -19,32 +19,29 @@ gulp.timer = require('./util/timer');
 gulp.logger = require('./util/logger');
 gulp.errorHandler = require('./util/error-handler');
 
-// set the gulp dir root
+// gulp dir, should be the same as PWD
 gulp.dir = __dirname;
 
-// require ALL js files in the task directory recursively
-var obj = requireDir('./tasks');
+var args = process.argv.slice(4);
 
-if(ENV === 'development')
-	_.extend(obj, requireDir('./tasks/development'));
+(args.length > 0 ? args : _.flatten(config.tasks, true)).forEach(function(task) {
+	var module = require('./tasks/' + task);
 
+	// those tasks that require access to the config object will
+	// return a function. call it.
+	if(_.isFunction(module))
+		module(gulp, config);
+});
+
+// TCB-Gulp executable calls 'gulp --cwd [ path to tcb-gulp ], but gulp saves
+// the initial CWD in INIT_CWD. In order for our node app to function properly,
+// we set the CWD back to the directory in which tcb-glp was called
 if(process.env.INIT_CWD) {
 	process.chdir(process.env.INIT_CWD);
 	gutil.log('Working directory changed (BACK) to' + chalk.magenta(process.cwd()));
 }
-// since all task files should return a function
-// that takes the gulp instance and the config as parameters,
-// all functions on the `obj` are called.
-for(var p in obj) {
-	obj[p](gulp, config);
-}
 
-// sets up all tasks fr[m config.tasks using runSequence, usually only the
-// 'default' task
-_.each(config.tasks, function(subTasks, name) {
-	gulp.task(name, function(callback) {
-		var tasks = subTasks.slice(0);
-		tasks.push(callback);
-		runSequence.apply(null, tasks);
-	});
+// set up the 'default' task to use runSequence to run all tasks
+gulp.task('default', function(callback) {
+	runSequence.apply(null, config.tasks.concat(callback));
 });

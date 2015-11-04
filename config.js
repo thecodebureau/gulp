@@ -129,12 +129,8 @@ var static = {
 };
 
 var tasks = {
-	development: {
-		default: [ 'wipe', [ 'bower', 'browserify', 'dust', 'fonts','raster', 'sass', 'static', 'svg' ], [ 'nodemon' ], [ 'watch', 'browser-sync' ] ]
-	},
-	production: {
-		default: [ 'wipe', [ 'bower', 'browserify', 'dust', 'fonts', 'raster', 'sass', 'static', 'svg' ]]
-	}
+	development: [ 'wipe', [ 'bower', 'browserify', 'dust', 'fonts','raster', 'sass', 'static', 'svg' ], [ 'nodemon' ], [ 'watch', 'browser-sync' ] ],
+	production: [ 'wipe', [ 'bower', 'browserify', 'dust', 'fonts', 'raster', 'sass', 'static', 'svg' ]]
 };
 
 var svg = {

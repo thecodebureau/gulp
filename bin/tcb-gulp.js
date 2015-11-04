@@ -11,7 +11,7 @@ if(!fs.existsSync(gulpExecutable)) {
 	gulpExecutable = p.join(p.dirname(tcbGulpPath), '.bin/gulp');
 }
 
-var gulpProcess = spawn(gulpExecutable, [ '--cwd', tcbGulpPath ], { stdio: 'inherit' });
+var gulpProcess = spawn(gulpExecutable, [ '--cwd', tcbGulpPath ].concat(process.argv.slice(2)), { stdio: 'inherit' });
 
 gulpProcess.on('close', function() {
 	console.log('Gulp process exited');
