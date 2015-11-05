@@ -115,7 +115,11 @@ var sass =  {
 		dest: dir.public.css,
 		options: {
 			outputStyle: 'nested',
-			includePaths: [ p.join(PWD, './node_modules/spysass/sass') ],
+			includePaths: [
+				p.join(PWD, 'node_modules/spysass/sass'),
+				p.join(PWD, 'node_modules/susy/sass'),
+				p.join(PWD, 'node_modules/breakpoint-sass/sass')
+			],
 			imagePath: '../img',
 		}
 	}
