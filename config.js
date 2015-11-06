@@ -26,7 +26,7 @@ var autoprefixer = {
 var bower = {
 	defaults: {
 		src: p.join(dir.root, 'bower_components'),
-		dest: p.join(dir.public.scripts, 'bower')
+		dest: p.join(dir.public.scripts, 'vendor')
 	}
 };
 
@@ -158,7 +158,7 @@ var wipe = {
 };
 
 // TODO allow defaults, production etc in userConfig
-module.exports = {
+module.exports = _.defaults({
 	autoprefixer: _.merge(autoprefixer.defaults, autoprefixer[ENV], userConfig.autoprefixer),
 	bower: _.merge(bower.defaults, bower[ENV], userConfig.bower),
 	browserSync: _.merge(browserSync.defaults, browserSync[ENV], userConfig.browserSync),
@@ -173,8 +173,8 @@ module.exports = {
 	raster: _.merge(raster.defaults, raster[ENV], userConfig.raster),
 	sass: _.merge(sass.defaults, sass[ENV], userConfig.sass),
 	static: _.merge(static.defaults, static[ENV], userConfig.static),
-	tasks: tasks[ENV],
+	tasks: (userConfig.tasks ? userConfig.tasks[ENV] : userConfig.tasks) || tasks[ENV],
 	svg: _.merge(svg.defaults, svg[ENV], userConfig.svg),
 	watch: _.merge(watch.defaults, watch[ENV], userConfig.watch),
 	wipe: _.merge(wipe.defaults, wipe[ENV], userConfig.wipe)
-};
+}, userConfig);
