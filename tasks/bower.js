@@ -47,11 +47,13 @@ function bower(dir){
 	return files;
 }
 
+var config = gulp.config.bower;
+
 gulp.task('bower', function() {
-	_.each(bower(gulp.config.bower.src), function(src, dest) {
+	_.each(bower(config.src), function(src, dest) {
 		gulp.src(src).
 			pipe(uglify()).pipe(rename(function(p){
 				p.basename = _.difference(p.basename.split(/[-_\.]/), ['dist', 'src', 'min', 'js']).join('-');
-			})).pipe(gulp.dest(config.bower.dest));
+			})).pipe(gulp.dest(config.dest));
 	});
 });
