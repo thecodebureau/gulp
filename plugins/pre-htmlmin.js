@@ -18,7 +18,7 @@ module.exports = function preHtmlmin(options, sync) {
 			return cb(null, file);
 		}
 
-		var regexp = /{[\/?+:#><][^}]*}/g;
+		var regexp = /{[@\/?+:#><][^}]*}/g;
 
 		var str = file.contents.toString();
 
