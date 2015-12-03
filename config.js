@@ -4,9 +4,39 @@ var fs = require('fs');
 
 // TODO test if defaults,production on object
 var port = require(p.join(PWD, 'server/config/port'));
-var dir = require(p.join(PWD, 'server/config/dir'));
 
 var userConfig = fs.existsSync(p.join(PWD, 'gulpconfig.js')) ? require(p.join(PWD, 'gulpconfig.js')) : {};
+
+var dir = _.merge({
+	// Any code that needs to a "middle landing spot" while built, place it anywhere here
+	build: {
+		root: p.join(PWD, 'build')
+	},
+
+	// public directories. Where all static/built/live content goes.
+	// make sure epiphany static dir points to the correct public direcotry
+	dest: {
+		css: p.join(PWD, 'public', 'css'),
+		fonts: p.join(PWD, 'public', 'fonts'),
+		img: p.join(PWD, 'public', 'img'),
+		root: p.join(PWD, 'public'),
+		// make sure epiphany's template directory points here
+		templates: p.join(PWD, 'public', 'uncompiled-templates'),
+		scripts: p.join(PWD, 'public', 'js')
+	},
+
+	// Source directories. This is where you put all content that needs to be built before use.
+	src: {
+		fonts: p.join(PWD, 'src', 'fonts'),
+		raster: p.join(PWD, 'src', 'raster'),
+		root: p.join(PWD, 'src'),
+		sass: p.join(PWD, 'src', 'sass'),
+		static: p.join(PWD, 'src', 'static'),
+		scripts: p.join(PWD, 'src', 'js'),
+		templates: p.join(PWD, 'src', 'templates'),
+		svg: p.join(PWD, 'src', 'svg'),
+	}
+}, userConfig.dir);
 
 var autoprefixer = {
 	defaults: {
@@ -25,8 +55,8 @@ var autoprefixer = {
 
 var bower = {
 	defaults: {
-		src: p.join(dir.root, 'bower_components'),
-		dest: p.join(dir.public.scripts, 'vendor')
+		src: p.join(PWD, 'bower_components'),
+		dest: p.join(dir.dest.scripts, 'vendor')
 	}
 };
 
@@ -37,8 +67,8 @@ var browserSync = {
 		ghostMode: false,
 		proxy: "localhost:" + port,
 		files: [
-			p.join(dir.public.css, '**/*.css'),
-			p.join(dir.public.scripts, '**/*.js'),
+			p.join(dir.dest.css, '**/*.css'),
+			p.join(dir.dest.scripts, '**/*.js'),
 			// won't reload correctly for dust templates. Assuming it has to do with nodemon restarting node and node compiling templates.
 			//p.join(dir.server.templates, '**/*.{html,dust}'),
 		]
@@ -52,15 +82,17 @@ var browserify = {
 		//prelude: 'loadBundle',
 		//_require: true,
 		debug: true,
-		dest: dir.public.scripts,
-		entries: [ 
-			'app.js'
-		],
+		dest: dir.dest.scripts,
 		paths: [ p.join(PWD, 'node_modules'), p.join(PWD, 'modules') ],// PWD/node_modules is added so symlinked ridge does not break. used to work without this in browserify 9
 		//paths: [ p.join(PWD, 'node_modules/hats'), p.join(PWD, 'hats') ],
 		// outputs only need to be used if output names are different from entries. Otherwise the entries array is copied into the outputs array.
+		entries: [
+			'app.js',
+			'admin/app.js'
+		],
 		outputs: [
-			'app.js'
+			'app.js',
+			'admin.js'
 		],
 		src: dir.src.scripts
 	},
@@ -79,14 +111,14 @@ var dust = {
 	defaults: {
 		// needs to be an array so it can be merged with gulpconfig.js array
 		src:  [ p.join(dir.src.templates, '**/*.dust') ],
-		dest: dir.public.templates,
+		dest: dir.dest.templates,
 	}
 };
 
 var fonts = {
 	defaults: {
 		src: p.join(dir.src.fonts, '**/*.{eot,ttf,woff}'),
-		dest: dir.public.fonts
+		dest: dir.dest.fonts
 	}
 };
 
@@ -105,14 +137,14 @@ var nodemon = {
 var raster = {
 	defaults: {
 		src: p.join(dir.src.raster, '**/*.{png,gif,jpg}'),
-		dest: dir.public.img
+		dest: dir.dest.img
 	}
 };
 
 var sass =  {
 	defaults: {
 		src:  p.join(dir.src.sass, '**/*.{sass,scss}'),
-		dest: dir.public.css,
+		dest: dir.dest.css,
 		options: {
 			outputStyle: 'nested',
 			includePaths: [
@@ -128,7 +160,7 @@ var sass =  {
 var static = {
 	defaults: {
 		src: p.join(dir.src.static, '**/*'),//NOTE exlusion of directories is done in the static task file
-		dest: dir.public.root
+		dest: dir.dest.root
 	}
 };
 
@@ -140,7 +172,7 @@ var tasks = {
 var svg = {
 	defaults: {
 		src: p.join(dir.src.svg, '**/*.svg'),
-		dest: dir.public.img
+		dest: dir.dest.img
 	}
 };
 
@@ -153,7 +185,7 @@ var watch = {
 
 var wipe = {
 	defaults: {
-		src: [ dir.public.root ]
+		src: [ dir.dest.root ]
 	}
 };
 
