@@ -126,6 +126,7 @@ var nodemon = {
 	defaults: _.merge(require(p.join(PWD, 'nodemon.json')), {
 		script: require(p.join(PWD, 'package.json')).main.replace(/^\./, PWD),
 		env: {
+			EXTERNAL_PORT: 3000,// what port you actually put into the browser... when using browser-sync this will differ from the internal port used by express
 			PWD: PWD,
 			DEBUG_COLORS: true,// needed to force debug to use colors despite tty.istty(0) being false, which it is in a child process
 			NODE_ENV: ENV,
@@ -205,7 +206,7 @@ module.exports = _.defaults({
 	raster: _.merge(raster.defaults, raster[ENV], userConfig.raster),
 	sass: _.merge(sass.defaults, sass[ENV], userConfig.sass),
 	static: _.merge(static.defaults, static[ENV], userConfig.static),
-	tasks: (userConfig.tasks ? userConfig.tasks[ENV] : userConfig.tasks) || tasks[ENV],
+	tasks: userConfig.tasks ? userConfig.tasks[ENV] || userConfig.tasks : tasks[ENV],
 	svg: _.merge(svg.defaults, svg[ENV], userConfig.svg),
 	watch: _.merge(watch.defaults, watch[ENV], userConfig.watch),
 	wipe: _.merge(wipe.defaults, wipe[ENV], userConfig.wipe)
