@@ -63,7 +63,7 @@ var bower = {
 var browserSync = {
 	defaults: {},
 	development: {
-		browser: 'chromium',
+		browser: null,
 		ghostMode: false,
 		proxy: "localhost:" + port,
 		files: [
