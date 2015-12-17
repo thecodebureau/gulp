@@ -44,17 +44,17 @@ gulp.task(TASK_NAME, function(done) {
 			}
 		}));
 
-	if(ENV === 'production') {
-		// NOTE! no dust variables in html comments in production. they will be matched in pre plugin,
-		// removed in minify and then attempt to access in post!
-		pipe.on('end', function() {
-				done();
-			})
-			.pipe(preMinify())
-			.pipe(minify(options))
-			.pipe(postMinify())
-			.pipe(gulp.dest(config.dest));
-	} else {
+	//if(ENV === 'production') {
+	//	// NOTE! no dust variables in html comments in production. they will be matched in pre plugin,
+	//	// removed in minify and then attempt to access in post!
+	//	pipe.on('end', function() {
+	//			done();
+	//		})
+	//		.pipe(preMinify())
+	//		.pipe(minify(options))
+	//		.pipe(postMinify())
+	//		.pipe(gulp.dest(config.dest));
+	//} else {
 		return pipe
 			.on('end', function() {
 				gutil.log(chalk.cyan(TASK_NAME) + ' done symlinking ' + chalk.bold.blue(count) + ' files');
@@ -63,5 +63,5 @@ gulp.task(TASK_NAME, function(done) {
 				count++;
 				return p.join(config.dest, file.relative);
 			}, { log: false }));
-	}
+	//}
 });
