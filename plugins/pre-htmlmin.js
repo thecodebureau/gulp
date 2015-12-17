@@ -26,7 +26,7 @@ module.exports = function preHtmlmin(options, sync) {
 
 		// TODO maybe it would be more effecient to iterate over matches array
 		// instead of doing new regex
-		file.contents = new Buffer(str.split(regexp).join('aaaaaaaaaaaa'));
+		file.contents = new Buffer(str.split(regexp).join('ÖÖÖÖ'));
 
 		cb(null, file);
 	});

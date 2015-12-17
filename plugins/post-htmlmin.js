@@ -19,7 +19,7 @@ module.exports = function preHtmlmin(options, sync) {
 
 		var str = file.contents.toString();
 
-		var arr = str.split('aaaaaaaaaaaa');
+		var arr = str.split('ÖÖÖÖ');
 
 		var matches = file.matches;
 
