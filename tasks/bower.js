@@ -7,6 +7,13 @@ var gulp = require('gulp');
 var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
 
+var TASK_NAME = 'bower';
+
+var config = gulp.config({
+	src: p.join(PWD, 'bower_components'),
+	dest: p.join(dir.dest.scripts, 'vendor')
+}, gulp.userConfig[TASK_NAME]);
+
 function bower(dir){
 	var files = [];
 
@@ -47,9 +54,7 @@ function bower(dir){
 	return files;
 }
 
-var config = gulp.config.bower;
-
-gulp.task('bower', function() {
+gulp.task(TASK_NAME, function() {
 	_.each(bower(config.src), function(src, dest) {
 		gulp.src(src).
 			pipe(uglify()).pipe(rename(function(p){

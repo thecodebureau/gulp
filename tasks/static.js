@@ -13,9 +13,15 @@ var gutil = require('gulp-util');
 // modules > gulp:plugins
 var symlink = require('gulp-symlink');
 
+var dir = gulp.directories;
+
 var TASK_NAME = 'static';
 
-var config = gulp.config.static;
+var config = gulp.config({
+	src: p.join(dir.src.static, '**/*'),//NOTE exlusion of directories is done in the static task file
+	dest: dir.dest.root
+}, gulp.userConfig[TASK_NAME]);
+
 
 gulp.task(TASK_NAME, function() {
 	var count = 0;

@@ -15,7 +15,30 @@ var gulp = require('gulp');
 var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
 
-var config = gulp.config.browserify;
+var dir = gulp.directories;
+
+var TASK_NAME = 'browserify';
+
+var config = gulp.config({
+	// All these are for lazy loading of bundles
+	//hasExports: false,
+	//prelude: 'loadBundle',
+	//_require: true,
+	debug: true,
+	dest: dir.dest.scripts,
+	paths: [ p.join(PWD, 'node_modules'), p.join(PWD, 'modules') ],// PWD/node_modules is added so symlinked ridge does not break. used to work without this in browserify 9
+	//paths: [ p.join(PWD, 'node_modules/hats'), p.join(PWD, 'hats') ],
+	// outputs only need to be used if output names are different from entries. Otherwise the entries array is copied into the outputs array.
+	entries: [
+		'app.js',
+		'admin/app.js'
+	],
+	outputs: [
+		'app.js',
+		'admin.js'
+	],
+	src: dir.src.scripts
+}, gulp.userConfig[TASK_NAME]);
 
 function piper (file) {
 	var w = new stream.Writable();
@@ -95,7 +118,7 @@ if(config.outputs.length > 1) {
 
 var suffix = ENV === 'production' ? '-' + Date.now().toString(16) : '';
 
-gulp.task('browserify', function(callback) {
+gulp.task(TASK_NAME, function(callback) {
 
 	if(!initialized) {
 		gulp.mkdir(config.dest);

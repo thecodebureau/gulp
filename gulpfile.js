@@ -1,5 +1,6 @@
 // modules > native
 var p = require('path');
+var fs = require('fs');
 
 // modules > 3rd party
 var _ = require('lodash');
@@ -15,22 +16,29 @@ global.ENV = process.env.NODE_ENV || 'development';
 global.PWD = process.env.PWD;
 
 // gulp config
-var config = gulp.config = require('./config');
-
 // set up gulp helper functions
 gulp.mkdir = require('./util/mkdir');
 gulp.timer = require('./util/timer');
 gulp.logger = require('./util/logger');
 gulp.errorHandler = require('./util/error-handler');
+gulp.config = require('./util/config');
 
 // gulp dir, should be the same as PWD
-gulp.dir = __dirname;
+gulp.directories = require('./directories');
+
+gulp.userConfig = fs.existsSync(p.join(PWD, 'gulpconfig.js')) ? require(p.join(PWD, 'gulpconfig.js')) : {};
 
 var args = process.argv.slice(4);
 
-var tasks = args.length > 0 ? args : _.flatten(config.tasks, true);
+var tasks = args.length > 0 ? args : gulp.config({
+	development: [ 'wipe', [ 'browserify', 'dust', 'fonts','raster', 'sass', 'static', 'svg' ], [ 'nodemon' ], [ 'watch', 'browser-sync' ] ],
+	production: [ 'wipe', [ 'browserify', 'dust', 'fonts', 'raster', 'sass', 'static', 'svg' ]]
+}, gulp.userConfig.tasks);
 
-_.difference(tasks, config.localTasks).forEach(function(task) {
+var taskNames = _.flatten(tasks, true);
+
+// only require non-local tasks
+_.difference(taskNames, gulp.userConfig.localTasks).forEach(function(task) {
 	require('./tasks/' + task);
 });
 
@@ -43,13 +51,13 @@ process.env.GULP_CWD = process.cwd();
 if(process.env.INIT_CWD) {
 	process.chdir(process.env.INIT_CWD);
 
-	if(config.localTasks) {
-		var path = config.localPath || './gulp-tasks';
+	if(gulp.userConfig.localTasks) {
+		var path = gulp.userConfig.localPath || './gulp-tasks';
 
 		if(/\.js/.test(path))
 			require(/^\//.test(path) ? path : p.join(PWD, path));
 		else
-			_.union(tasks, config.localTasks).forEach(function(task) {
+			_.union(tasks, gulp.userConfig.localTasks).forEach(function(task) {
 				require(p.join(path, task));
 			});
 	}
@@ -59,5 +67,5 @@ if(process.env.INIT_CWD) {
 
 // set up the 'default' task to use runSequence to run all tasks
 gulp.task('default', function(callback) {
-	runSequence.apply(null, config.tasks.concat(callback));
+	runSequence.apply(null, tasks.concat(callback));
 });

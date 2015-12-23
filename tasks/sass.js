@@ -14,7 +14,39 @@ var autoprefixer = require('autoprefixer');
 var sourcemaps = require('gulp-sourcemaps');
 var rename = require('gulp-rename');
 
-var config = gulp.config;
+var dir = gulp.directories;
+
+var TASK_NAME = 'sass';
+
+var config = {
+	autoprefixer: gulp.config({
+		browsers: [
+			'safari >= 5',
+			'ie >= 8',
+			'ios >= 6',
+			'opera >= 12.1',
+			'firefox >= 17',
+			'chrome >= 30',
+			'android >= 4'
+		],
+		cascade: true
+	}, gulp.userConfig.autoprefixer),
+
+	sass: gulp.config({
+		src:  p.join(dir.src.sass, '**/*.{sass,scss}'),
+		dest: dir.dest.css,
+		suffix: true,
+		options: {
+			outputStyle: 'nested',
+			includePaths: [
+				p.join(PWD, 'node_modules/spysass/sass'),
+				p.join(PWD, 'node_modules/susy/sass'),
+				p.join(PWD, 'node_modules/breakpoint-sass/sass')
+			],
+			imagePath: '../img',
+		}
+	}, gulp.userConfig[TASK_NAME])
+};
 
 function errorHandler(err) {
 	if(err.plugin === 'gulp-sass') {
@@ -47,14 +79,18 @@ if(ENV === 'production') {
 
 var suffix = '-' + Date.now().toString(16);
 
-gulp.task('sass', function() {
-	fs.writeFile(config.sass.dest + '.json', JSON.stringify({ suffix: suffix }));
+gulp.task(TASK_NAME, function() {
+	if(config.sass.suffix)
+		fs.writeFile(config.sass.dest + '.json', JSON.stringify({ suffix: suffix }));
 
-	return gulp.src(config.sass.src)
+	var pipe = gulp.src(config.sass.src)
 		.pipe(sourcemaps.init())
 		.pipe(sass(config.sass.options).on('error', errorHandler))
-		.pipe(postcss(processors))
-		.pipe(rename({ suffix: suffix }))
-		.pipe(sourcemaps.write('./maps'))
+		.pipe(postcss(processors));
+
+	if(config.sass.suffix)
+		pipe = pipe.pipe(rename({ suffix: suffix }));
+
+	return pipe.pipe(sourcemaps.write('./maps'))
 		.pipe(gulp.dest(config.sass.dest));
 });

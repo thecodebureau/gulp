@@ -11,9 +11,14 @@ var gutil = require('gulp-util');
 // modules > gulp:plugins
 var symlink = require('gulp-symlink');
 
+var dir = gulp.directories;
+
 var TASK_NAME = 'svg';
 
-var config = gulp.config.svg;
+var config = gulp.config({
+	src: p.join(dir.src.svg, '**/*.svg'),
+	dest: dir.dest.img
+}, gulp.userConfig[TASK_NAME]);
 
 gulp.task(TASK_NAME, function() {
 	var count = 0;
