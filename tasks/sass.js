@@ -14,8 +14,6 @@ var autoprefixer = require('autoprefixer');
 var sourcemaps = require('gulp-sourcemaps');
 var rename = require('gulp-rename');
 
-var dir = gulp.directories;
-
 var TASK_NAME = 'sass';
 
 var config = {
@@ -33,8 +31,8 @@ var config = {
 	}, gulp.userConfig.autoprefixer),
 
 	sass: gulp.config({
-		src:  p.join(dir.src.sass, '**/*.{sass,scss}'),
-		dest: dir.dest.css,
+		src:  p.join(PWD, 'src/sass/**/*.{sass,scss}'),
+		dest: p.join(PWD, 'public/css'),
 		suffix: true,
 		options: {
 			outputStyle: 'nested',

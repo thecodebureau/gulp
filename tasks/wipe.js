@@ -1,15 +1,14 @@
+var p = require('path');
 var fs = require('fs');
 
 var gulp = require('gulp');
 var gutil = require('gulp-util');
 var rimraf = require('rimraf');
 
-var dir = gulp.directories;
-
 var TASK_NAME = 'wipe';
 
 var config = gulp.config({
-	src: [ dir.dest.root ]
+	src: [ p.join(PWD, 'public') ]
 }, gulp.userConfig[TASK_NAME]);
 
 gulp.task(TASK_NAME, function(cb) {

@@ -17,14 +17,12 @@ var symlink = require('gulp-symlink');
 var preMinify = require('../plugins/pre-htmlmin');
 var postMinify = require('../plugins/post-htmlmin');
 
-var dir = gulp.directories;
-
 var TASK_NAME = 'dust';
 
 var config = gulp.config({
 	// needs to be an array so it can be merged with gulpconfig.js array
-	src:  [ p.join(dir.src.templates, '**/*.dust') ],
-	dest: dir.dest.templates,
+	src:  [ p.join(PWD, 'src/templates/**/*.dust') ],
+	dest: p.join(PWD, 'public/uncompiled-templates'),
 }, gulp.userConfig[TASK_NAME]);
 
 var finished = [];

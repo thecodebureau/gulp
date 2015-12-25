@@ -15,8 +15,6 @@ var gulp = require('gulp');
 var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
 
-var dir = gulp.directories;
-
 var TASK_NAME = 'browserify';
 
 var config = gulp.config({
@@ -25,9 +23,8 @@ var config = gulp.config({
 	//prelude: 'loadBundle',
 	//_require: true,
 	debug: true,
-	dest: dir.dest.scripts,
+	dest: p.join(PWD, 'public/js'),
 	paths: [ p.join(PWD, 'node_modules'), p.join(PWD, 'modules') ],// PWD/node_modules is added so symlinked ridge does not break. used to work without this in browserify 9
-	//paths: [ p.join(PWD, 'node_modules/hats'), p.join(PWD, 'hats') ],
 	// outputs only need to be used if output names are different from entries. Otherwise the entries array is copied into the outputs array.
 	entries: [
 		'app.js',
@@ -37,7 +34,7 @@ var config = gulp.config({
 		'app.js',
 		'admin.js'
 	],
-	src: dir.src.scripts
+	src: p.join(PWD, 'src/js')
 }, gulp.userConfig[TASK_NAME]);
 
 function piper (file) {
@@ -140,8 +137,8 @@ gulp.task(TASK_NAME, function(callback) {
 
 	var b = browserify(config);
 	
-	for(var p in plugins) {
-		b.plugin(plugins[p], config);
+	for(var prop in plugins) {
+		b.plugin(plugins[prop], config);
 	}
 
 	return b.bundle()

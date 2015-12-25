@@ -11,13 +11,11 @@ var gutil = require('gulp-util');
 // modules > gulp:plugins
 var symlink = require('gulp-symlink');
 
-var dir = gulp.directories;
-
 var TASK_NAME = 'raster';
 
 var config = gulp.config({
-	src: p.join(dir.src.raster, '**/*.{png,gif,jpg}'),
-	dest: dir.dest.img
+	src: p.join(PWD, 'src/raster/**/*.{png,gif,jpg}'),
+	dest: p.join(PWD, 'public/img')
 }, gulp.userConfig[TASK_NAME]);
 
 

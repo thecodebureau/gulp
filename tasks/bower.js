@@ -11,7 +11,7 @@ var TASK_NAME = 'bower';
 
 var config = gulp.config({
 	src: p.join(PWD, 'bower_components'),
-	dest: p.join(dir.dest.scripts, 'vendor')
+	dest: p.join(PWD, 'public/js/vendor')
 }, gulp.userConfig[TASK_NAME]);
 
 function bower(dir){

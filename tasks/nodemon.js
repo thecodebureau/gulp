@@ -5,8 +5,6 @@ var gulp = require('gulp');
 var browserSync = require('browser-sync');
 var nodemon = require('gulp-nodemon');
 
-var dir = gulp.directories;
-
 var TASK_NAME = 'nodemon';
 
 var config = gulp.config({

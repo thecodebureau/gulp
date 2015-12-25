@@ -11,13 +11,11 @@ var gutil = require('gulp-util');
 // modules > gulp:plugins
 var symlink = require('gulp-symlink');
 
-var dir = gulp.directories;
-
 var TASK_NAME = 'fonts';
 
 var config = gulp.config({
-	src: p.join(dir.src.fonts, '**/*.{eot,ttf,woff}'),
-	dest: dir.dest.fonts
+	src: p.join(PWD, 'src/fonts/**/*.{eot,ttf,woff}'),
+	dest: p.join(PWD, 'public/fonts')
 }, gulp.userConfig[TASK_NAME]);
 
 
