@@ -26,8 +26,6 @@ gulp.config = require('./util/config');
 // gulp dir, should be the same as PWD
 gulp.dir = __dirname;
 
-console.log(gulp.dir);
-
 gulp.userConfig = fs.existsSync(p.join(PWD, 'gulpconfig.js')) ? require(p.join(PWD, 'gulpconfig.js')) : {};
 
 var args = process.argv.slice(4);
@@ -67,7 +65,6 @@ if(process.env.INIT_CWD) {
 	gutil.log('Working directory changed (BACK) to ' + chalk.magenta(process.cwd()));
 }
 
-console.log(tasks);
 // set up the 'default' task to use runSequence to run all tasks
 gulp.task('default', function(callback) {
 	runSequence.apply(null, tasks.concat(callback));

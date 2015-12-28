@@ -15,7 +15,7 @@ var config = gulp.config({
 		ghostMode: false,
 		proxy: "localhost:" + (port || 10000),
 		files: [
-			p.join(PWD, 'pulic/css/**/*.css'),
+			p.join(PWD, 'public/css/**/*.css'),
 			p.join(PWD, 'public/js/**/*.js'),
 		]
 	}
